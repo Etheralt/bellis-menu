@@ -13,9 +13,7 @@
   </form>
 
   <script type="module">
-    // Import Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDE-ALjM_E3gCpyH3_rbMz2u-hEFJ8nO2c",
@@ -27,9 +25,8 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
 
-    // Login system with fixed credentials
+    // Simple login check with fixed credentials
     const loginForm = document.getElementById("loginForm");
 
     loginForm.addEventListener('submit', (event) => {
