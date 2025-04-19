@@ -49,11 +49,22 @@
       const name = document.getElementById("itemName").value;
       const desc = document.getElementById("itemDesc").value;
       const img = document.getElementById("itemImg").value;
+
       if (name && desc && img) {
-        await addDoc(collection(db, "coffees"), { name, description: desc, imageUrl: img });
-        loadItems();
+        try {
+          // Adding to Firebase Firestore
+          await addDoc(collection(db, "coffees"), {
+            name,
+            description: desc,
+            imageUrl: img
+          });
+          alert("Item added successfully!");
+          loadItems(); // Reload the items list
+        } catch (e) {
+          alert("Error adding item: " + e.message);
+        }
       } else {
-        alert("Please fill all fields.");
+        alert("Please fill in all fields.");
       }
     }
 
@@ -72,11 +83,15 @@
 
     // Delete item from Firebase
     async function deleteItem(id) {
-      await deleteDoc(doc(db, "coffees", id));
-      loadItems();
+      try {
+        await deleteDoc(doc(db, "coffees", id));
+        loadItems(); // Reload items list after deletion
+      } catch (e) {
+        alert("Error deleting item: " + e.message);
+      }
     }
 
-    loadItems();
+    loadItems(); // Load items initially when the page loads
   </script>
 </body>
 </html>
