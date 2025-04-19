@@ -7,11 +7,18 @@
 <body>
   <h2>Admin Panel</h2>
   <button onclick="logOut()">Logout</button>
+
   <h3>Manage Menu Items</h3>
 
   <input type="text" id="itemName" placeholder="Item Name" />
   <input type="text" id="itemDesc" placeholder="Description" />
   <input type="text" id="itemImg" placeholder="Image URL" />
+
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
+    <!-- Categories will be dynamically loaded here -->
+  </select>
+  
   <button onclick="addItem()">Add Item</button>
 
   <h3>Menu Items</h3>
@@ -35,7 +42,7 @@
 
     // Check if user is logged in
     if (!localStorage.getItem("isLoggedIn")) {
-      window.location.href = "../login.html";  // Redirect if not logged in
+      window.location.href = "../login.html"; // Redirect to login if not logged in
     }
 
     // Log out function
@@ -44,22 +51,38 @@
       window.location.href = "../login.html";
     }
 
-    // Add menu item to Firebase
+    // Load categories (collections) dynamically
+    async function loadCategories() {
+      // Hardcoded for now. You can add more categories as needed.
+      const categories = ["coffees", "teas", "smoothies"];
+      
+      const categorySelect = document.getElementById("categorySelect");
+
+      categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+      });
+    }
+
+    // Add menu item to selected collection in Firebase
     async function addItem() {
       const name = document.getElementById("itemName").value;
       const desc = document.getElementById("itemDesc").value;
       const img = document.getElementById("itemImg").value;
+      const category = document.getElementById("categorySelect").value;
 
       if (name && desc && img) {
         try {
-          // Adding to Firebase Firestore
-          await addDoc(collection(db, "coffees"), {
+          // Adding to the selected category in Firebase Firestore
+          await addDoc(collection(db, category), {
             name,
             description: desc,
             imageUrl: img
           });
           alert("Item added successfully!");
-          loadItems(); // Reload the items list
+          loadItems(category); // Reload the items list of the selected category
         } catch (e) {
           alert("Error adding item: " + e.message);
         }
@@ -68,30 +91,34 @@
       }
     }
 
-    // Load menu items
-    async function loadItems() {
-      const querySnapshot = await getDocs(collection(db, "coffees"));
+    // Load menu items from the selected category
+    async function loadItems(category) {
+      const querySnapshot = await getDocs(collection(db, category));
       const menuList = document.getElementById("menuList");
-      menuList.innerHTML = "";
+      menuList.innerHTML = ""; // Clear existing list
+
       querySnapshot.forEach(docSnap => {
         const data = docSnap.data();
         const li = document.createElement("li");
-        li.innerHTML = `${data.name} - ${data.description} <img src="${data.imageUrl}" width="50"> <button onclick="deleteItem('${docSnap.id}')">Delete</button>`;
+        li.innerHTML = `${data.name} - ${data.description} <img src="${data.imageUrl}" width="50"> <button onclick="deleteItem('${docSnap.id}', '${category}')">Delete</button>`;
         menuList.appendChild(li);
       });
     }
 
-    // Delete item from Firebase
-    async function deleteItem(id) {
+    // Delete item from selected category
+    async function deleteItem(id, category) {
       try {
-        await deleteDoc(doc(db, "coffees", id));
-        loadItems(); // Reload items list after deletion
+        await deleteDoc(doc(db, category, id));
+        loadItems(category); // Reload items list after deletion
       } catch (e) {
         alert("Error deleting item: " + e.message);
       }
     }
 
-    loadItems(); // Load items initially when the page loads
+    // Load categories and items initially
+    loadCategories(); // Load the categories dropdown
+    loadItems("coffees"); // Load items from the 'coffees' category initially
+
   </script>
 </body>
 </html>
