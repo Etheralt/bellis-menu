@@ -158,7 +158,7 @@
 </head>
 <body>
   <header>
-    <img src="https://ugc.production.linktr.ee/7a95bcdc-0a67-4eb3-8f06-eff72d593992_4-02.jpeg?io=true&size=avatar-v3_0" alt="Cafe Logo"> 
+    <img src="https://ugc.production.linktr.ee/7a95bcdc-0a67-4eb3-8f06-eff72d593992_4-02.jpeg" alt="Cafe Logo"> 
     The Bellis Perennis
   </header>
   <nav>
@@ -166,10 +166,10 @@
       <i class="fab fa-instagram"></i>
     </div>
     <div class="tabs">
-      <button class="tab active" onclick="showCategory('sides', event)" data-key="sides">Yan Lezzetler</button>
-      <button class="tab" onclick="showCategory('coffee', event)" data-key="coffee">Kahve</button>
-      <button class="tab" onclick="showCategory('tea', event)" data-key="tea">Çay</button>
-      <button class="tab" onclick="showCategory('cold-drinks', event)" data-key="coldDrinks">Soğuk İçecekler</button>
+      <button class="tab active" onclick="showCategory('sides', event)">Yan Lezzetler</button>
+      <button class="tab" onclick="showCategory('coffee', event)">Kahve</button>
+      <button class="tab" onclick="showCategory('tea', event)">Çay</button>
+      <button class="tab" onclick="showCategory('cold-drinks', event)">Soğuk İçecekler</button>
     </div>
     <div class="nav-right">
       <div class="dropdown">
@@ -196,14 +196,6 @@
           <h3 data-key="warmSpicedBeefSalad">Sıcak Baharatlı Dana Salatası</h3>
           <p data-key="warmSpicedBeefSaladDesc">Cam eriştesi, Asya salatası, kişniş...</p>
           <p class="price">$21.9</p>
-        </div>
-      </div>
-      <div class="menu-item">
-        <img src="https://source.unsplash.com/100x100/?kale">
-        <div class="menu-details">
-          <h3 data-key="californianSuperFoodSalad">Kaliforniya Süper Yiyecek Salatası</h3>
-          <p data-key="californianSuperFoodSaladDesc">Quinoa, kale, mısır, jalapeño...</p>
-          <p class="price">$17.9</p>
         </div>
       </div>
     </div>
@@ -254,34 +246,25 @@
 
   <script>
     let currentLanguage = 'tr';
-    const flagMap = { tr: "https://flagcdn.com/w40/tr.png", en: "https://flagcdn.com/w40/gb.png" };
+    const flagMap = {
+      tr: "https://flagcdn.com/w40/tr.png",
+      en: "https://flagcdn.com/w40/gb.png"
+    };
 
     const languageTexts = {
       en: {
-        sides: "Sides",
-        coffee: "Coffee",
-        tea: "Tea",
-        coldDrinks: "Cold Drinks",
         warmSpicedBeefSalad: "Warm Spiced Beef Salad",
-        warmSpicedBeefSaladDesc: "Glass noodles, Asian salad, coriander, red pepper, peanuts, scallions, crispy shallots",
-        californianSuperFoodSalad: "Californian Super Food Salad",
-        californianSuperFoodSaladDesc: "Tricolor quinoa, kale, wild rice, roasted corn, jalapeño, black beans",
+        warmSpicedBeefSaladDesc: "Glass noodles, Asian salad, coriander...",
         latte: "Latte",
-        latteDesc: "Smooth espresso and steamed milk",
+        latteDesc: "Smooth espresso and milk",
         greenTea: "Green Tea",
         greenTeaDesc: "Freshly brewed green tea",
         orangeJuice: "Orange Juice",
         orangeJuiceDesc: "Freshly squeezed orange juice"
       },
       tr: {
-        sides: "Yan Lezzetler",
-        coffee: "Kahve",
-        tea: "Çay",
-        coldDrinks: "Soğuk İçecekler",
         warmSpicedBeefSalad: "Sıcak Baharatlı Dana Salatası",
-        warmSpicedBeefSaladDesc: "Cam eriştesi, Asya salatası, kişniş, kırmızı biber, fıstık, taze soğan ve çıtır arpacık",
-        californianSuperFoodSalad: "Kaliforniya Süper Yiyecek Salatası",
-        californianSuperFoodSaladDesc: "Üç renkli quinoa, kale, yaban pirinci, mısır, jalapeño, kara fasulye",
+        warmSpicedBeefSaladDesc: "Cam eriştesi, Asya salatası, kişniş...",
         latte: "Latte",
         latteDesc: "Pürüzsüz espresso ve süt",
         greenTea: "Yeşil Çay",
@@ -323,4 +306,3 @@
   </script>
 </body>
 </html>
-<!-- Force rebuild -->
