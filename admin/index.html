@@ -26,7 +26,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, getDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDE-ALjM_E3gCpyH3_rbMz2u-hEFJ8nO2c",
@@ -51,14 +51,14 @@
       window.location.href = "../login.html";
     }
 
-    // Load categories (collections) dynamically
+    // Load categories from Firestore
     async function loadCategories() {
-      // Hardcoded for now. You can add more categories as needed.
-      const categories = ["coffees", "teas", "smoothies"];
-      
       const categorySelect = document.getElementById("categorySelect");
+      categorySelect.innerHTML = ''; // Clear previous categories
 
-      categories.forEach(category => {
+      const categoriesSnapshot = await getDocs(collection(db, "categories"));
+      categoriesSnapshot.forEach(docSnap => {
+        const category = docSnap.id; // Use the document ID as the category name
         const option = document.createElement("option");
         option.value = category;
         option.textContent = category;
@@ -66,7 +66,7 @@
       });
     }
 
-    // Add menu item to selected collection in Firebase
+    // Add menu item to selected category in Firebase
     async function addItem() {
       const name = document.getElementById("itemName").value;
       const desc = document.getElementById("itemDesc").value;
