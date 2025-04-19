@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Bellis Menü</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: white;
+      color: #193328;
+    }
+    header {
+      background: white;
+      padding: 30px;
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #193328;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    header img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #193328;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+    nav button.tab,
+    .dropdown-toggle {
+      background-color: #2e4a3f;
+      border: none;
+      font-size: 16px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    nav button.tab:hover,
+    .dropdown-toggle:hover {
+      background-color: #3f6354;
+    }
+    nav button.tab.active {
+      background-color: #4a685c;
+    }
+    .menu-section {
+      display: none;
+      background-color: white;
+      padding: 0;
+    }
+    .menu-section.active {
+      display: block;
+    }
+    .menu-list {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-item {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+    }
+    .menu-item:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+    .menu-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 2px solid #4a685c;
+    }
+    .menu-details h3,
+    .menu-details p,
+    .price {
+      color: #193328;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: #4a685c;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      z-index: 999;
+    }
+    .dropdown-menu.show {
+      display: block;
+    }
+    .dropdown-menu div {
+      padding: 10px 15px;
+      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dropdown-menu div:hover {
+      background: #193328;
+    }
+    .dropdown-toggle img {
+      width: 24px;
+      height: 16px;
+      vertical-align: middle;
+    }
+    .dropdown-menu img {
+      width: 20px;
+      height: 14px;
+    }
+    .socials i {
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+    }
+    footer {
+      background: #193328;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <img src="https://ugc.production.linktr.ee/7a95bcdc-0a67-4eb3-8f06-eff72d593992_4-02.jpeg?io=true&size=avatar-v3_0" alt="Cafe Logo"> 
+    The Bellis Perennis
+  </header>
+  <nav>
+    <div class="nav-left socials">
+      <i class="fab fa-instagram"></i>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showCategory('sides', event)" data-key="sides">Yan Lezzetler</button>
+      <button class="tab" onclick="showCategory('coffee', event)" data-key="coffee">Kahve</button>
+      <button class="tab" onclick="showCategory('tea', event)" data-key="tea">Çay</button>
+      <button class="tab" onclick="showCategory('cold-drinks', event)" data-key="coldDrinks">Soğuk İçecekler</button>
+    </div>
+    <div class="nav-right">
+      <div class="dropdown">
+        <div class="dropdown-toggle" onclick="toggleDropdown()">
+          <img id="flag-img" src="https://flagcdn.com/w40/tr.png" alt="TR">
+        </div>
+        <div class="dropdown-menu" id="lang-menu">
+          <div onclick="setLanguage('tr')">
+            <img src="https://flagcdn.com/w40/tr.png" alt="TR"> Türkçe
+          </div>
+          <div onclick="setLanguage('en')">
+            <img src="https://flagcdn.com/w40/gb.png" alt="EN"> English
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="menu-section active" id="sides">
+    <div class="menu-list">
+      <div class="menu-item">
+        <img src="https://source.unsplash.com/100x100/?salad">
+        <div class="menu-details">
+          <h3 data-key="warmSpicedBeefSalad">Sıcak Baharatlı Dana Salatası</h3>
+          <p data-key="warmSpicedBeefSaladDesc">Cam eriştesi, Asya salatası, kişniş...</p>
+          <p class="price">$21.9</p>
+        </div>
+      </div>
+      <div class="menu-item">
+        <img src="https://source.unsplash.com/100x100/?kale">
+        <div class="menu-details">
+          <h3 data-key="californianSuperFoodSalad">Kaliforniya Süper Yiyecek Salatası</h3>
+          <p data-key="californianSuperFoodSaladDesc">Quinoa, kale, mısır, jalapeño...</p>
+          <p class="price">$17.9</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section" id="coffee">
+    <div class="menu-list">
+      <div class="menu-item">
+        <img src="https://source.unsplash.com/100x100/?coffee">
+        <div class="menu-details">
+          <h3 data-key="latte">Latte</h3>
+          <p data-key="latteDesc">Pürüzsüz espresso ve süt</p>
+          <p class="price">$4.5</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section" id="tea">
+    <div class="menu-list">
+      <div class="menu-item">
+        <img src="https://source.unsplash.com/100x100/?tea">
+        <div class="menu-details">
+          <h3 data-key="greenTea">Yeşil Çay</h3>
+          <p data-key="greenTeaDesc">Demlenmiş yeşil çay</p>
+          <p class="price">$3.2</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section" id="cold-drinks">
+    <div class="menu-list">
+      <div class="menu-item">
+        <img src="https://source.unsplash.com/100x100/?juice">
+        <div class="menu-details">
+          <h3 data-key="orangeJuice">Portakal Suyu</h3>
+          <p data-key="orangeJuiceDesc">Taze sıkılmış portakal suyu</p>
+          <p class="price">$4.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 The Bellis Perennis. Tüm hakları saklıdır.
+  </footer>
+
+  <script>
+    let currentLanguage = 'tr';
+    const flagMap = { tr: "https://flagcdn.com/w40/tr.png", en: "https://flagcdn.com/w40/gb.png" };
+
+    const languageTexts = {
+      en: {
+        sides: "Sides",
+        coffee: "Coffee",
+        tea: "Tea",
+        coldDrinks: "Cold Drinks",
+        warmSpicedBeefSalad: "Warm Spiced Beef Salad",
+        warmSpicedBeefSaladDesc: "Glass noodles, Asian salad, coriander, red pepper, peanuts, scallions, crispy shallots",
+        californianSuperFoodSalad: "Californian Super Food Salad",
+        californianSuperFoodSaladDesc: "Tricolor quinoa, kale, wild rice, roasted corn, jalapeño, black beans",
+        latte: "Latte",
+        latteDesc: "Smooth espresso and steamed milk",
+        greenTea: "Green Tea",
+        greenTeaDesc: "Freshly brewed green tea",
+        orangeJuice: "Orange Juice",
+        orangeJuiceDesc: "Freshly squeezed orange juice"
+      },
+      tr: {
+        sides: "Yan Lezzetler",
+        coffee: "Kahve",
+        tea: "Çay",
+        coldDrinks: "Soğuk İçecekler",
+        warmSpicedBeefSalad: "Sıcak Baharatlı Dana Salatası",
+        warmSpicedBeefSaladDesc: "Cam eriştesi, Asya salatası, kişniş, kırmızı biber, fıstık, taze soğan ve çıtır arpacık",
+        californianSuperFoodSalad: "Kaliforniya Süper Yiyecek Salatası",
+        californianSuperFoodSaladDesc: "Üç renkli quinoa, kale, yaban pirinci, mısır, jalapeño, kara fasulye",
+        latte: "Latte",
+        latteDesc: "Pürüzsüz espresso ve süt",
+        greenTea: "Yeşil Çay",
+        greenTeaDesc: "Demlenmiş yeşil çay",
+        orangeJuice: "Portakal Suyu",
+        orangeJuiceDesc: "Taze sıkılmış portakal suyu"
+      }
+    };
+
+    function showCategory(id, e) {
+      document.querySelectorAll('.menu-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      e.target.classList.add('active');
+    }
+
+    function toggleDropdown() {
+      document.getElementById('lang-menu').classList.toggle('show');
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.getElementById('flag-img').src = flagMap[lang];
+      document.title = lang === 'tr' ? 'The Bellis Menü' : 'The Bellis Menu';
+      updateTextForLanguage();
+      toggleDropdown();
+    }
+
+    function updateTextForLanguage() {
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (languageTexts[currentLanguage][key]) {
+          el.innerText = languageTexts[currentLanguage][key];
+        }
+      });
+    }
+
+    updateTextForLanguage();
+  </script>
+</body>
+</html>
