@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | The Bellis</title>
+</head>
+<body>
+    <h2>Admin Panel</h2>
+    <button onclick="logOut()">Logout</button>
+
+    <h3>Manage Menu Items</h3>
+    <input type="text" id="itemName" placeholder="Item Name" />
+    <input type="text" id="itemDesc" placeholder="Description" />
+    <input type="text" id="itemImg" placeholder="Image URL" />
+
+    <label for="categorySelect">Select Category:</label>
+    <select id="categorySelect">
+        <!-- Categories will be dynamically loaded here -->
+    </select>
+
+    <button onclick="addItem()">Add Item</button>
+
+    <h3>Menu Items</h3>
+    <ul id="menuList"></ul>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDE-ALjM_E3gCpyH3_rbMz2u-hEFJ8nO2c",
+            authDomain: "bellis-menu.firebaseapp.com",
+            projectId: "bellis-menu",
+            storageBucket: "bellis-menu.firebasestorage.app",
+            messagingSenderId: "1765826468",
+            appId: "1:1765826468:web:73115f5b5f910d89c16b31"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Securing the admin panel
+        if (!localStorage.getItem("isLoggedIn")) {
+            window.location.href = "login.html";  // Redirect to login page if not logged in
+        }
+
+        // Function to log out
+        function logOut() {
+            localStorage.removeItem("isLoggedIn");  // Remove login status
+            window.location.href = "login.html";  // Redirect to login page
+        }
+
+        // Function to load categories from Firebase
+        async function loadCategories() {
+            const categoriesSnapshot = await getDocs(collection(db, "categories"));
+            const categories = categoriesSnapshot.docs.map(doc => doc.id);
+            const categorySelect = document.getElementById("categorySelect");
+
+            categories.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category;
+                option.innerText = category;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        loadCategories();
+
+        // Function to add an item to Firebase
+        async function addItem() {
+            const name = document.getElementById("itemName").value;
+            const desc = document.getElementById("itemDesc").value;
+            const img = document.getElementById("itemImg").value;
+            const category = document.getElementById("categorySelect").value;
+
+            if (name && desc && img && category) {
+                try {
+                    await addDoc(collection(db, category), {
+                        name,
+                        description: desc,
+                        imageUrl: img
+                    });
+                    alert("Item added successfully!");
+                    document.getElementById("itemName").value = "";
+                    document.getElementById("itemDesc").value = "";
+                    document.getElementById("itemImg").value = "";
+                } catch (e) {
+                    alert("Error adding item: " + e.message);
+                }
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+    </script>
+</body>
+</html>
