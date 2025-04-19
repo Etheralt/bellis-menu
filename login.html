@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDE-ALjM_E3gCpyH3_rbMz2u-hEFJ8nO2c",
+            authDomain: "bellis-menu.firebaseapp.com",
+            projectId: "bellis-menu",
+            storageBucket: "bellis-menu.firebasestorage.app",
+            messagingSenderId: "1765826468",
+            appId: "1:1765826468:web:73115f5b5f910d89c16b31"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Redirect to the admin page after login
+                    window.location.href = "admin.html";
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    alert("Login failed: " + errorMessage);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Login</h1>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <button onclick="login()">Login</button>
+</body>
+</html>
