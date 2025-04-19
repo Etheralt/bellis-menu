@@ -14,6 +14,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDE-ALjM_E3gCpyH3_rbMz2u-hEFJ8nO2c",
@@ -26,7 +27,7 @@
 
     const app = initializeApp(firebaseConfig);
 
-    // Simple login check with fixed credentials
+    const auth = getAuth();
     const loginForm = document.getElementById("loginForm");
 
     loginForm.addEventListener('submit', (event) => {
@@ -36,7 +37,7 @@
 
       if (username === "admin" && password === "admin") {
         localStorage.setItem("isLoggedIn", "true");
-        window.location.href = "admin/index.html";
+        window.location.href = "admin/index.html"; // Redirect to admin panel
       } else {
         alert("Invalid credentials");
       }
