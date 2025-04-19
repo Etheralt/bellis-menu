@@ -51,19 +51,30 @@
       window.location.href = "../login.html";
     }
 
-    // Load categories from Firestore
+    // Load categories dynamically from Firestore
     async function loadCategories() {
       const categorySelect = document.getElementById("categorySelect");
-      categorySelect.innerHTML = ''; // Clear previous categories
+      categorySelect.innerHTML = ''; // Clear any pre-existing categories
 
-      const categoriesSnapshot = await getDocs(collection(db, "categories"));
-      categoriesSnapshot.forEach(docSnap => {
-        const category = docSnap.id; // Use the document ID as the category name
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        categorySelect.appendChild(option);
-      });
+      // Retrieve categories from Firestore
+      try {
+        const categorySnapshot = await getDocs(collection(db, "categories"));
+        
+        categorySnapshot.forEach((docSnap) => {
+          const categoryName = docSnap.id; // Use the document ID as category name
+          const option = document.createElement("option");
+          option.value = categoryName;
+          option.textContent = categoryName;
+          categorySelect.appendChild(option); // Append the category to the dropdown
+        });
+
+        if (categorySelect.options.length === 0) {
+          alert("No categories found. Please add categories to Firebase.");
+        }
+      } catch (error) {
+        console.error("Error loading categories: ", error);
+        alert("There was an issue loading categories.");
+      }
     }
 
     // Add menu item to selected category in Firebase
@@ -73,16 +84,15 @@
       const img = document.getElementById("itemImg").value;
       const category = document.getElementById("categorySelect").value;
 
-      if (name && desc && img) {
+      if (name && desc && img && category) {
         try {
-          // Adding to the selected category in Firebase Firestore
           await addDoc(collection(db, category), {
             name,
             description: desc,
             imageUrl: img
           });
           alert("Item added successfully!");
-          loadItems(category); // Reload the items list of the selected category
+          loadItems(category); // Reload the items for the selected category
         } catch (e) {
           alert("Error adding item: " + e.message);
         }
@@ -91,13 +101,13 @@
       }
     }
 
-    // Load menu items from the selected category
+    // Load items from the selected category
     async function loadItems(category) {
       const querySnapshot = await getDocs(collection(db, category));
       const menuList = document.getElementById("menuList");
-      menuList.innerHTML = ""; // Clear existing list
+      menuList.innerHTML = ""; // Clear existing menu items
 
-      querySnapshot.forEach(docSnap => {
+      querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
         const li = document.createElement("li");
         li.innerHTML = `${data.name} - ${data.description} <img src="${data.imageUrl}" width="50"> <button onclick="deleteItem('${docSnap.id}', '${category}')">Delete</button>`;
@@ -105,20 +115,19 @@
       });
     }
 
-    // Delete item from selected category
+    // Delete item from Firestore
     async function deleteItem(id, category) {
       try {
         await deleteDoc(doc(db, category, id));
-        loadItems(category); // Reload items list after deletion
+        loadItems(category); // Reload items after deletion
       } catch (e) {
         alert("Error deleting item: " + e.message);
       }
     }
 
     // Load categories and items initially
-    loadCategories(); // Load the categories dropdown
-    loadItems("coffees"); // Load items from the 'coffees' category initially
-
+    loadCategories(); // Load categories dynamically
+    loadItems("coffees"); // Load items from the default category (coffees)
   </script>
 </body>
 </html>
